@@ -3,6 +3,65 @@
 import json
 from bittrex.bittrex import Bittrex
 import time
+import csv
+
+
+class Tracker():
+    '''docu'''
+    def __init__(self):
+        with open("secrets.json") as secrets_file:
+            self.secrets = json.load(secrets_file)
+            secrets_file.close()
+        self.bittrex = Bittrex(self.secrets['key'], self.secrets['secret'])
+
+        self.tracker_setting = []
+        with open('tracker_settings.csv') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                self.tracker_setting.append(row)
+            print(self.tracker_setting)
+
+        self.tracker_status = []
+        with open('tracker_status.csv') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                self.tracker_status.append(row)
+            print(self.tracker_status)
+
+        # check if exist new orders:
+        while not len(self.tracker_status) == len(self.tracker_setting):
+            print('not equal!')
+            self.tracker_status.append({})
+        print(self.tracker_status)
+
+        # update tracking orders:
+        for order, status in zip(self.tracker_setting, self.tracker_status):
+            status['id'] = order['id']
+            status['market'] = order['market']
+            status['order'] = order['order']
+            status['quantity'] = order['quantity']
+            status['threshold'] = order['threshold']
+            status['max_gap'] = order['max_gap']
+            status['active'] = order['active']
+            # order['completed']
+            try:
+                status['thresholded']
+            except:
+                print('initiating new tracking order...')
+                status['thresholded'] = False
+                status['buy_sell_signal'] = False
+                status['order_completed'] = False
+                status['new_threshold'] = 0.0
+                status['last_value'] = 0.0
+
+        # write status to file
+        with open('tracker_status.csv', 'w') as f:
+            writer = csv.DictWriter(f, self.tracker_status[0].keys(), delimiter=',')
+            writer.writeheader()
+            for market in self.tracker_status:
+                writer.writerow(market)
+
+        print(json.dumps(self.tracker_status, indent=4))
 
 
 class Bittrex_Handler():
@@ -13,7 +72,7 @@ class Bittrex_Handler():
             secrets_file.close()
         self.bittrex = Bittrex(self.secrets['key'], self.secrets['secret'])
         self.balances = {}
-        self.tracker_status = tracker_setting
+        self.tracker_status = tracker_setting_
         for market in self.tracker_status:
             market['thresholded'] = False
             market['buy_sell_signal'] = False
@@ -95,8 +154,9 @@ class Bittrex_Handler():
 
 
 # This should be placed in a file using a CSV table...
-tracker_setting = [
+tracker_setting_ = [
     {
+        'index': 1,
         'active': True,
         'order': 'sell',
         'ticker': 'USDT-ZEC',
@@ -104,6 +164,7 @@ tracker_setting = [
         'max_gap': 3,
         'quantity': 0.1
     },{
+        'index': 2,
         'active': True,
         'order': 'buy',
         'ticker': 'USDT-ZEC',
@@ -111,6 +172,7 @@ tracker_setting = [
         'max_gap': 3,
         'quantity': 0.2
     }, {
+        'index': 3,
         'active': True,
         'order': 'sell',
         'ticker': 'USDT-BTC',
@@ -118,6 +180,7 @@ tracker_setting = [
         'max_gap': 3,
         'quantity': 0.1
     }, {
+        'index': 4,
         'active': True,
         'order': 'buy',
         'ticker': 'USDT-BTC',
@@ -127,18 +190,36 @@ tracker_setting = [
     }
 ]
 
-
 if __name__ == '__main__':
-    bittrex_handler = Bittrex_Handler()
+    tracker = Tracker()
 
-    print(json.dumps(bittrex_handler.tracker_status, indent=4))
 
-    # bittrex_handler.sell_limit('USDT-ZEC', 0.1, 500.0)
 
-    while True:
+# if __name__ == '__main__':
+#     bittrex_handler = Bittrex_Handler()
 
-        bittrex_handler.tracker()
-        print(json.dumps(bittrex_handler.tracker_status, indent=4))
-        bittrex_handler.sell_buy()
+#     # print(json.dumps(bittrex_handler.tracker_status, indent=4))
 
-        time.sleep(10)
+#     # bittrex_handler.sell_limit('USDT-ZEC', 0.1, 500.0)
+
+#     while True:
+#         tracker_setting = []
+#         with open('tracker_settings.csv') as f:
+#             reader = csv.DictReader(f)
+#             for row in reader:
+#                 tracker_setting.append(row)
+#             print(tracker_setting)
+
+#         bittrex_handler.tracker()
+#         print(json.dumps(bittrex_handler.tracker_status, indent=4))
+#         bittrex_handler.sell_buy()
+
+#         with open('tracker_status.csv', 'w') as f:
+
+#             writer = csv.DictWriter(f, bittrex_handler.tracker_status[0].keys(), delimiter=',')
+#             writer.writeheader()
+
+#             for market in bittrex_handler.tracker_status:
+#                 writer.writerow(market)
+
+#         time.sleep(10)
