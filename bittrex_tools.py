@@ -93,11 +93,6 @@ class Tracker():
         
         print(json.dumps(self.tracker_status))
 
-
-
-
-
-
         with open('tracker_status.csv', 'w') as f:
             writer = csv.DictWriter(f, tracker.tracker_status[0].keys(), delimiter=',')
             writer.writeheader()
@@ -235,10 +230,13 @@ tracker_setting_ = [
 ]
 
 if __name__ == '__main__':
-    tracker = Tracker()
+    
     while True:
+        tracker = Tracker()
         tracker.track()
+
         time.sleep(2)
+        del tracker
 
 
 
