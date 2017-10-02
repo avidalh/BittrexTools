@@ -1,6 +1,7 @@
 id,market,order,quantity,threshold,max_gap,active,completed
-1,USDT-ZEC,sell,0.1,300,3.,True,False
-2,USDT-ZEC,buy,0.2,250,3.,True,False
-3,USDT-BTC,sell,0.1,4380,3.,True,False
-4,USDT-BTC,buy,0.01,3000,3.,True,False
-5,USDT-BTC,buy,0.01,55,3.,True,False
+0,USDT-ZEC,sell,0.59999220,350,3.,True,False
+1,USDT-ZEC,buy,0.2,255,3.,True,False
+2,BTC-ZEC,buy,0.21554724,0.05,3.,True,False
+3,BTC-ZEC,sell,0.59999220,0.1,3.,True,False
+4,USDT-BTC,sell,0.21554724,4500,3.,True,False
+5,USDT-BTC,buy,0.02,4000,3.,True,False

@@ -157,7 +157,7 @@ class Tracker():
                 break
             if market['buy_sell_signal'] and market['order'] == 'sell':
                 app_log.info('selling {} at {}'.format(market['ticker'], market['last']))
-                result = self.bittrex.sell_limit(market=market['ticker'], quantity=market['quantity'], rate=float(market['last'])*2.)
+                result = self.bittrex.sell_limit(market=market['ticker'], quantity=market['quantity'], rate=float(market['last']))
                 # print(json.dumps(result, indent=4))
                 if result['success']:
                     market['order_completed'] = 'True'
@@ -165,7 +165,7 @@ class Tracker():
             
             elif market['buy_sell_signal'] and market['order'] == 'buy':
                 app_log.info('buying {} at {}'.format(market['ticker'], market['last']))
-                result = self.bittrex.buy_limit(market=market['ticker'], quantity=market['quantity'], rate=float(market['last'])/2.)
+                result = self.bittrex.buy_limit(market=market['ticker'], quantity=market['quantity'], rate=float(market['last']))
                 # print(json.dumps(result, indent=4))
                 if result['success']:
                     app_log.info('order completed...')
