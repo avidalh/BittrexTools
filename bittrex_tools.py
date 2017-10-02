@@ -3,7 +3,9 @@
 import json
 from bittrex.bittrex import Bittrex
 import time
+import datetime
 import csv
+
 
 
 class Tracker():
@@ -43,16 +45,22 @@ class Tracker():
             status['threshold'] = order['threshold']
             status['max_gap'] = order['max_gap']
             status['active'] = order['active']
-            # order['completed']
-            try:
-                status['thresholded']
-            except:
+            if len(status) == 7:
                 print('initiating new tracking order...')
-                status['thresholded'] = False
-                status['buy_sell_signal'] = False
-                status['order_completed'] = False
+                status['thresholded'] = 'False'
+                status['buy_sell_signal'] = 'False'
+                status['order_completed'] = 'False'
                 status['new_threshold'] = 0.0
                 status['last_value'] = 0.0
+                status['TimeStamp'] = str(datetime.datetime.now())
+            else:
+                # if in any order was changed its threshold levels during a run:
+                if status['order'] == 'sell':
+                    if float(status['new_threshold']) < float(order['threshold']):
+                        status['thresholded'] = 'False'
+                elif status['order'] == 'sell':
+                    if float(status['new_threshold']) > float(order['threshold']):
+                        status['thresholded'] = 'False'
 
         # write status to file
         with open('tracker_status.csv', 'w') as f:
@@ -66,30 +74,33 @@ class Tracker():
     def track(self):
         ''' docu '''
         for market in self.tracker_status:
-            if not market['active']:
+            if market['active'] == 'False':
                 break
             live_market = self.bittrex.get_ticker(market['market'])['result']
             market['last_value'] = live_market['Last']
+            market['TimeStamp'] = str(datetime.datetime.now())
 
-            if market['thresholded'] == "False":
-                    if live_market['Last'] >= market['threshold'] and market['order'] == 'sell':
-                        market['thresholded'] = True
+            if market['thresholded'] == 'False':
+                if market['order'] == 'sell':
+                    if float(live_market['Last']) >= float(market['threshold']):
+                        market['thresholded'] = 'True'
                         market['new_threshold'] = live_market['Last']
-                    if live_market['Last'] <= market['threshold'] and market['order'] == 'buy':
-                        market['thresholded'] = True
+                if market['order'] == 'buy':
+                    if float(live_market['Last']) <= float(market['threshold']):
+                        market['thresholded'] = 'True'
                         market['new_threshold'] = live_market['Last']
             else:
                 if market['order'] == 'sell':
-                    if live_market['Last'] > market['new_threshold']:
+                    if float(live_market['Last']) > float(market['new_threshold']):
                         market['new_threshold'] = live_market['Last']
                     elif float(live_market['Last']) <= (float(market['new_threshold']) * (1 - float(market['max_gap'])/100)):
-                        market['buy_sell_signal'] = True
+                        market['buy_sell_signal'] = 'True'
                 elif market['order'] == 'buy':
-                    if live_market['Last'] < market['new_threshold']:
+                    if float(live_market['Last']) < float(market['new_threshold']):
                         market['new_threshold'] = live_market['Last']
                         # market['last'] = market_status['Last']
                     elif float(live_market['Last']) >= (float(market['new_threshold']) * (1 + float(market['max_gap'])/100.0)):
-                        market['buy_sell_signal'] = True
+                        market['buy_sell_signal'] = 'True'
         
         print(json.dumps(self.tracker_status))
 
@@ -98,7 +109,6 @@ class Tracker():
             writer.writeheader()
             for market in self.tracker_status:
                 writer.writerow(market)
-
 
 
 
@@ -235,7 +245,7 @@ if __name__ == '__main__':
         tracker = Tracker()
         tracker.track()
 
-        time.sleep(2)
+        time.sleep(15)
         del tracker
 
 
