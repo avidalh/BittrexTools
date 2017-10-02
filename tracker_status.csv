@@ -1,6 +1,5 @@
 thresholded,id,max_gap,threshold,buy_sell_signal,new_threshold,active,order_completed,last_value,order,market,quantity
-False,1,3,300,False,0.0,True,False,0.0,sell,USDT-ZEC,0.1
-False,2,3,270,False,0.0,True,False,0.0,buy,USDT-ZEC,0.2
-False,3,3,4380,False,0.0,True,False,0.0,sell,USDT-BTC,0.1
-False,4,3,3000,False,0.0,True,False,0.0,buy,USDT-BTC,0.01
-False,5,3,3000,False,0.0,True,False,0.0,buy,USDT-BTC,0.01
+False,1,3.,300,False,0.0,True,False,263.2,sell,USDT-ZEC,0.1
+True,2,3.,270,False,263.0,True,False,263.2,buy,USDT-ZEC,0.2
+False,3,3.,4380,False,0.0,True,False,4430.51,sell,USDT-BTC,0.1
+True,4,3.,3000,False,4430.0,True,False,4430.51,buy,USDT-BTC,0.01

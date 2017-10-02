@@ -63,6 +63,50 @@ class Tracker():
 
         print(json.dumps(self.tracker_status, indent=4))
 
+    def track(self):
+        ''' docu '''
+        for market in self.tracker_status:
+            if not market['active']:
+                break
+            live_market = self.bittrex.get_ticker(market['market'])['result']
+            market['last_value'] = live_market['Last']
+
+            if market['thresholded'] == "False":
+                    if live_market['Last'] >= market['threshold'] and market['order'] == 'sell':
+                        market['thresholded'] = True
+                        market['new_threshold'] = live_market['Last']
+                    if live_market['Last'] <= market['threshold'] and market['order'] == 'buy':
+                        market['thresholded'] = True
+                        market['new_threshold'] = live_market['Last']
+            else:
+                if market['order'] == 'sell':
+                    if live_market['Last'] > market['new_threshold']:
+                        market['new_threshold'] = live_market['Last']
+                    elif float(live_market['Last']) <= (float(market['new_threshold']) * (1 - float(market['max_gap'])/100)):
+                        market['buy_sell_signal'] = True
+                elif market['order'] == 'buy':
+                    if live_market['Last'] < market['new_threshold']:
+                        market['new_threshold'] = live_market['Last']
+                        # market['last'] = market_status['Last']
+                    elif float(live_market['Last']) >= (float(market['new_threshold']) * (1 + float(market['max_gap'])/100.0)):
+                        market['buy_sell_signal'] = True
+        
+        print(json.dumps(self.tracker_status))
+
+
+
+
+
+
+        with open('tracker_status.csv', 'w') as f:
+            writer = csv.DictWriter(f, tracker.tracker_status[0].keys(), delimiter=',')
+            writer.writeheader()
+            for market in self.tracker_status:
+                writer.writerow(market)
+
+
+
+
 
 class Bittrex_Handler():
     '''docu'''
@@ -192,6 +236,10 @@ tracker_setting_ = [
 
 if __name__ == '__main__':
     tracker = Tracker()
+    while True:
+        tracker.track()
+        time.sleep(2)
+
 
 
 
