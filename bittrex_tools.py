@@ -93,7 +93,7 @@ class Tracker():
 
         # write status to file
         with open('tracker_status.csv', 'w') as f:
-            app_log.info('saving status to file...')
+            app_log.info('saving tracker status to file...')
             writer = csv.DictWriter(f, self.tracker_status[0].keys(), delimiter=',')
             writer.writeheader()
             for market in self.tracker_status:
