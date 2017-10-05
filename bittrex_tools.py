@@ -10,6 +10,10 @@ from logging.handlers import RotatingFileHandler
 import logging
 
 
+# TODO's:
+# Check balances prior order selling or buying to avoid errors in thq quantities
+# 
+
 # settings for the logger tool/utility
 # log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(funcName)s(%(lineno)d) %(message)s')
 log_formatter = logging.Formatter('%(asctime)s %(message)s')
@@ -35,6 +39,11 @@ class Tracker():
             self.secrets = json.load(secrets_file)
             secrets_file.close()
         self.bittrex = Bittrex(self.secrets['key'], self.secrets['secret'])
+
+        app_log.info('fetching avaliable balances...')
+        self.balances = []
+        self.get_balances()
+        app_log.info(json.dumps(self.balances, indent=4))
 
         self.tracker_setting = []
         app_log.info('loading tracker settings...')
@@ -100,6 +109,15 @@ class Tracker():
                 writer.writerow(market)
 
         # app_log.info(json.dumps(self.tracker_status, indent=4))
+
+
+    def get_balances(self):
+        ''' docu '''
+        actual = self.bittrex.get_balances()
+        self.balances = actual['result']
+        # for e in actual['result']:
+        #     print(e['CryptoAddress'], '\t', e['Currency'], '\t', e['Balance'], '\t', e['Available'])
+ 
 
     def track(self):
         ''' docu '''
@@ -173,8 +191,7 @@ class Tracker():
                     market['active'] = 'False'
 
 
-if __name__ == '__main__':
-    
+if __name__ == '__main__':  
     while True:
         tracker = Tracker()
         tracker.track()
