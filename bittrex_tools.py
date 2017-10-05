@@ -12,7 +12,7 @@ import logging
 
 # TODO's:
 # Check balances prior order selling or buying to avoid errors in thq quantities
-# 
+# url to pick historical data: https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName=BTC-ZEC&tickInterval=oneMin&_=1499127220008
 
 # settings for the logger tool/utility
 # log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(funcName)s(%(lineno)d) %(message)s')
@@ -173,19 +173,25 @@ class Tracker():
                 break
             if market['order_completed'] == 'True':
                 break
+            if market['quantity'] == 'all':
+                quantity = 0.0
             if market['buy_sell_signal'] and market['order'] == 'sell':
-                app_log.info('selling {} at {}'.format(market['ticker'], market['last']))
-                result = self.bittrex.sell_limit(market=market['ticker'], quantity=market['quantity'], rate=float(market['last']))
+                app_log.info('selling {} at {}'.format(market['market'], market['last']))
+                result = self.bittrex.sell_limit(market=market['market'],
+                                                 quantity=market['quantity'],
+                                                 rate=float(market['last']) * 100)  # safety belt... remove on real scenario
                 # print(json.dumps(result, indent=4))
-                if result['success']:
+                if result['success'] == 'True':
                     market['order_completed'] = 'True'
                     market['active'] = 'False'
             
             elif market['buy_sell_signal'] and market['order'] == 'buy':
-                app_log.info('buying {} at {}'.format(market['ticker'], market['last']))
-                result = self.bittrex.buy_limit(market=market['ticker'], quantity=market['quantity'], rate=float(market['last']))
+                app_log.info('buying {} at {}'.format(market['market'], market['last']))
+                result = self.bittrex.buy_limit(market=market['market'],
+                                                quantity=market['quantity'],
+                                                rate=float(market['last']) / 100) # safety belt... remove on real scenario
                 # print(json.dumps(result, indent=4))
-                if result['success']:
+                if result['success'] == 'True':
                     app_log.info('order completed...')
                     market['order_completed'] = 'True'
                     market['active'] = 'False'

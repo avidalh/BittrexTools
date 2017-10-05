@@ -1,7 +1,7 @@
-TimeStamp,thresholded,order,max_gap,active,buy_sell_signal,new_threshold,threshold,order_completed,last_value,id,market,quantity
-2017-10-03 08:50:02.876305,False,sell,3.,True,False,0.0,350,False,247.00001,0,USDT-ZEC,0.59999220
-2017-10-03 08:50:03.045878,True,buy,3.,True,False,245.005,255,False,247.00001,1,USDT-ZEC,0.2
-2017-10-03 08:50:03.215706,False,buy,3.,True,False,0.0,0.05,False,0.0569,2,BTC-ZEC,0.21554724
-2017-10-03 08:50:03.412968,False,sell,3.,True,False,0.0,0.1,False,0.0569,3,BTC-ZEC,0.59999220
-2017-10-03 08:50:03.581389,False,sell,3.,True,False,0.0,4500,False,4311.0,4,USDT-BTC,0.21554724
-2017-10-03 08:50:03.748059,False,buy,3.,True,False,0.0,4000,False,4311.0,5,USDT-BTC,0.02
+active,quantity,market,new_threshold,order,threshold,max_gap,thresholded,buy_sell_signal,id,TimeStamp,last_value,order_completed
+True,all,USDT-ZEC,0.0,sell,350,5.,False,False,0,2017-10-05 21:43:35.248709,0.0,False
+True,all,USDT-ZEC,0.0,buy,200,5.,False,False,1,2017-10-05 21:43:35.248794,0.0,False
+True,all,BTC-ZEC,0.0,sell,0.1,5.,False,False,2,2017-10-05 21:43:35.248860,0.0,False
+True,all,BTC-ZEC,0.0,buy,0.05,5.,False,False,3,2017-10-05 21:43:35.248925,0.0,False
+True,all,USDT-BTC,0.0,sell,4500,5.,False,False,4,2017-10-05 21:43:35.248989,0.0,False
+True,all,USDT-BTC,0.0,buy,3000,5.,False,False,5,2017-10-05 21:43:35.249053,0.0,False
