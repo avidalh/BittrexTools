@@ -165,6 +165,11 @@ class Tracker():
             for market in self.tracker_status:
                 writer.writerow(market)
 
+        # Update balances
+        app_log.info('updating balances...')
+        self.get_balances()
+
+
     def sell_buy(self):
         ''' insert docu '''
         app_log.info('sell_buy entry point...')
@@ -173,24 +178,35 @@ class Tracker():
                 break
             if market['order_completed'] == 'True':
                 break
-            if market['quantity'] == 'all':
-                quantity = 0.0
-            if market['buy_sell_signal'] and market['order'] == 'sell':
-                app_log.info('selling {} at {}'.format(market['market'], market['last']))
+            # if market['quantity'] == 'all':
+            #     market['quantity'] = self.balances
+
+            if market['buy_sell_signal'] == 'True' and market['order'] == 'sell':
+                if market['quantity'] == 'all':
+                    for currency in self.balances:
+                        if currency['Currency'] == market['market'].split('-')[1]:
+                            market['quantity'] = currency['Available']
+
+                app_log.info('selling {} at {}'.format(market['market'], market['last_value']))
                 result = self.bittrex.sell_limit(market=market['market'],
                                                  quantity=market['quantity'],
-                                                 rate=float(market['last']) * 100)  # safety belt... remove on real scenario
-                # print(json.dumps(result, indent=4))
+                                                 rate=float(market['last_value']) * 100)  # safety belt... remove on real scenario
+                print(json.dumps(result, indent=4))
                 if result['success'] == 'True':
                     market['order_completed'] = 'True'
                     market['active'] = 'False'
             
-            elif market['buy_sell_signal'] and market['order'] == 'buy':
-                app_log.info('buying {} at {}'.format(market['market'], market['last']))
+            elif market['buy_sell_signal'] == 'True' and market['order'] == 'buy':
+                if market['quantity'] == 'all':
+                    for currency in self.balances:
+                        if currency['Currency'] == market['market'].split('-')[0]:
+                            market['quantity'] = float(currency['Available']) / float(market['last_value'])
+
+                app_log.info('buying {} at {}'.format(market['market'], market['last_value']))
                 result = self.bittrex.buy_limit(market=market['market'],
                                                 quantity=market['quantity'],
-                                                rate=float(market['last']) / 100) # safety belt... remove on real scenario
-                # print(json.dumps(result, indent=4))
+                                                rate=float(market['last_value']) / 100) # safety belt... remove on real scenario
+                print(json.dumps(result, indent=4))
                 if result['success'] == 'True':
                     app_log.info('order completed...')
                     market['order_completed'] = 'True'
@@ -201,6 +217,7 @@ if __name__ == '__main__':
     while True:
         tracker = Tracker()
         tracker.track()
+        tracker.sell_buy()
 
         time.sleep(60)
         del tracker
