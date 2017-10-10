@@ -11,8 +11,8 @@ import logging
 
 
 # TODO's:
-# Check balances prior order selling or buying to avoid errors in thq quantities
-# url to pick historical data: https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName=BTC-ZEC&tickInterval=oneMin&_=1499127220008
+# - Check balances prior order selling or buying to avoid errors in thq quantities.
+# - url to pick historical data: https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName=BTC-ZEC&tickInterval=oneMin&_=1499127220008
 
 # settings for the logger tool/utility
 # log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(funcName)s(%(lineno)d) %(message)s')
