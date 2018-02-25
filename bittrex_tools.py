@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.5
+# !/usr/bin/env python3.5
 
 import json
 from bittrex.bittrex import Bittrex, API_V2_0

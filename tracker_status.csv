@@ -1,2 +1,2 @@
-buy_sell_signal,TimeStamp,max_gap,id,order_completed,threshold,new_threshold,quantity,order,active,last_value,market,thresholded
-False,2018-02-25 23:05:32.566151,5.0,0,False,10000,0.0,all,sell,True,9638.0,USDT-BTC,False
+active,thresholded,last_value,buy_sell_signal,order_completed,TimeStamp,quantity,threshold,max_gap,id,market,new_threshold,order
+True,False,9645.00000002,False,False,2018-02-25 23:15:11.313117,all,10000,5.0,0,USDT-BTC,0.0,sell
