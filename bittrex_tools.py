@@ -188,9 +188,9 @@ class Tracker():
                             market['quantity'] = currency['Available']
 
                 app_log.info('selling {} at {}'.format(market['market'], market['last_value']))
-                result = self.bittrex.sell_limit(market=market['market'],
-                                                 quantity=market['quantity'],
-                                                 rate=float(market['last_value']))
+                # result = self.bittrex.sell_limit(market=market['market'],
+                #                                  quantity=market['quantity'],
+                #                                  rate=float(market['last_value']))
                 print(json.dumps(result, indent=4))
                 if result['success'] == 'True':
                     market['order_completed'] = 'True'
@@ -203,9 +203,9 @@ class Tracker():
                             market['quantity'] = float(currency['Available']) / (float(market['last_value']))
 
                 app_log.info('buying {} at {}'.format(market['market'], market['last_value']))
-                result = self.bittrex.buy_limit(market=market['market'],
-                                                quantity=market['quantity'],
-                                                rate=float(market['last_value']))
+                # result = self.bittrex.buy_limit(market=market['market'],
+                #                                 quantity=market['quantity'],
+                #                                 rate=float(market['last_value']))
                 print(json.dumps(result, indent=4))
                 if result['success'] == 'True':
                     app_log.info('order completed...')
