@@ -1,7 +1,7 @@
-#!/usr/bin/env python3.5
+# !/usr/bin/env python3.5
 
 import json
-from bittrex.bittrex import Bittrex
+from bittrex.bittrex import Bittrex, API_V2_0
 import time
 import datetime
 import csv
@@ -115,8 +115,8 @@ class Tracker():
         ''' docu '''
         actual = self.bittrex.get_balances()
         self.balances = actual['result']
-        # for e in actual['result']:
-        #     print(e['CryptoAddress'], '\t', e['Currency'], '\t', e['Balance'], '\t', e['Available'])
+        for e in actual['result']:
+            print(e['CryptoAddress'], '\t', e['Currency'], '\t', e['Balance'], '\t', e['Available'])
  
 
     def track(self):
@@ -188,9 +188,10 @@ class Tracker():
                             market['quantity'] = currency['Available']
 
                 app_log.info('selling {} at {}'.format(market['market'], market['last_value']))
-                result = self.bittrex.sell_limit(market=market['market'],
-                                                 quantity=market['quantity'],
-                                                 rate=float(market['last_value']))
+                result = json.loads("{}")
+                # result = self.bittrex.sell_limit(market=market['market'],
+                #                                  quantity=market['quantity'],
+                #                                  rate=float(market['last_value']))
                 print(json.dumps(result, indent=4))
                 if result['success'] == 'True':
                     market['order_completed'] = 'True'
@@ -203,9 +204,11 @@ class Tracker():
                             market['quantity'] = float(currency['Available']) / (float(market['last_value']))
 
                 app_log.info('buying {} at {}'.format(market['market'], market['last_value']))
-                result = self.bittrex.buy_limit(market=market['market'],
-                                                quantity=market['quantity'],
-                                                rate=float(market['last_value']))
+                result = json.loads("{}")
+                # result = self.bittrex.buy_limit(market=market['market'],
+                #                                 quantity=market['quantity'],
+                #                                 rate=float(market['last_value']))
+                
                 print(json.dumps(result, indent=4))
                 if result['success'] == 'True':
                     app_log.info('order completed...')

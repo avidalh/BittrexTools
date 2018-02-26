@@ -106,4 +106,7 @@ venv.bak/
 
 
 secrets.json
+tracker_settings.csv
+tracker_status.csv
+
 *.pyc
