@@ -1,0 +1,2 @@
+TimeStamp,thresholded,order,max_gap,active,buy_sell_signal,new_threshold,threshold,order_completed,last_value,id,market,quantity
+2017-10-27 13:29:09.437486,False,sell,5.,True,False,0.0,260.,False,247.7,0,USDT-ZEC,all
