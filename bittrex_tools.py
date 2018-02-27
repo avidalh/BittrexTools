@@ -13,18 +13,18 @@ import logging
 # TODO's:
 # - Check balances prior order selling or buying to avoid errors in thq quantities.
 # - url to pick historical data: https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName=BTC-ZEC&tickInterval=oneMin&_=1499127220008
+# - check status timestamp, if there is a long time since the last update discard status?
+
 
 # settings for the logger tool/utility
 # log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(funcName)s(%(lineno)d) %(message)s')
 log_formatter = logging.Formatter('%(asctime)s %(message)s')
 log_formatter.converter = time.gmtime
 logFile = 'tracker.log'
-
 my_handler = RotatingFileHandler(logFile, mode='a', maxBytes=5*1024**2,
                                  backupCount=2, encoding=None, delay=0)
 my_handler.setFormatter(log_formatter)
 my_handler.setLevel(logging.INFO)
-
 app_log = logging.getLogger('root')
 app_log.setLevel(logging.INFO)
 app_log.addHandler(my_handler)
@@ -115,8 +115,8 @@ class Tracker():
         ''' docu '''
         actual = self.bittrex.get_balances()
         self.balances = actual['result']
-        for e in actual['result']:
-            print(e['CryptoAddress'], '\t', e['Currency'], '\t', e['Balance'], '\t', e['Available'])
+        # for e in actual['result']:
+        #     print(e['CryptoAddress'], '\t', e['Currency'], '\t', e['Balance'], '\t', e['Available'])
  
 
     def track(self):

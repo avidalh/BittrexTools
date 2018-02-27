@@ -1,13 +1,2 @@
 id,market,order,quantity,threshold,max_gap,active,completed
-<<<<<<< HEAD
-0,USDT-ZEC,sell,all,260.,5.,True,False
-||||||| merged common ancestors
-0,USDT-ZEC,sell,all,350,5.,True,False
-1,USDT-ZEC,buy,all,200,5.,True,False
-2,BTC-ZEC,sell,all,0.1,5.,True,False
-3,BTC-ZEC,buy,all,0.05,5.,True,False
-4,USDT-BTC,sell,all,4500,5.,True,False
-5,USDT-BTC,buy,all,3000,5.,True,False
-=======
 0,USDT-BTC,sell,all,10000,5.0,True,False
->>>>>>> 5b4c26e39089b096f00699c9da2e4f7b55f6fa17
